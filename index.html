@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Translate App</title>
+  </head>
+
+  <style>
+    * {
+      padding: 0px;
+      margin: 0px;
+      box-sizing: border-box;
+    }
+    #container {
+      display: flex;
+      padding: 10px;
+    }
+    #input-section {
+      /* border: 1px solid black; */
+      width: 100%;
+      margin: 10px;
+
+      padding: 10px;
+      box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+      border-radius: 20px;
+    }
+    #output-section {
+      /* border: 1px solid black; */
+      width: 100%;
+      margin: 10px;
+
+      padding: 10px;
+      box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+      border-radius: 20px;
+    }
+
+    textarea {
+      width: 100%;
+      overflow-y: auto;
+      height: 200px;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    p {
+      border-radius: 5px;
+      border: 1px solid gray;
+      padding: 10px;
+      overflow-y: auto;
+      height: 200px;
+    }
+    button,
+    select {
+      padding: 5px 10px;
+      border-radius: 20px;
+      border: 0px;
+      margin: 10px 30px 10px 0px;
+      background-color: blanchedalmond;
+    }
+    button:hover,
+    select:hover {
+      background-color: rgb(248, 200, 128);
+      cursor: pointer;
+    }
+  </style>
+
+  <body>
+    <div id="container">
+      <div id="input-section">
+        <!--Create button that will run translate text function, give id "translate-btn"-->
+        <div id="btn">
+          <button id="translate-btn" onclick=" getData()">Translate</button>
+          <select name="" id="lang-val-source" onchange="getData()">
+            <option value="en">English</option>
+            <option value="ar">Arabic</option>
+            <option value="az">Azerbaijani</option>
+            <option value="zh">Chinese</option>
+            <option value="cs">Czech</option>
+            <option value="nl">Dutch</option>
+            <option value="fi">Finnish</option>
+            <option value="fr">French</option>
+            <option value="de">German</option>
+            <option value="hi">Hindi</option>
+            <option value="hu">Hungarian</option>
+            <option value="id">Indonesian</option>
+            <option value="ga">Irish</option>
+            <option value="it">Italian</option>
+            <option value="ja">Japanese</option>
+            <option value="ko">Korean</option>
+            <option value="pl">Polish</option>
+            <option value="pt">Portuguese</option>
+            <option value="ru">Russian</option>
+            <option value="es">Spanish</option>
+            <option value="sv">Swedish</option>
+            <option value="tr">Turkish</option>
+            <option value="uk">Ukranian</option>
+            <option value="vi">Vietnamese</option>
+          </select>
+        </div>
+        <!--Create input that will accept text to be translated, give id "input-text"-->
+        <textarea name="" id="input-text" cols="30" rows="10"></textarea>
+      </div>
+      <div id="output-section">
+        <select name="" id="lang-val" onchange="getData()">
+          <option value="en">English</option>
+          <option value="ar">Arabic</option>
+          <option value="az">Azerbaijani</option>
+          <option value="zh">Chinese</option>
+          <option value="cs">Czech</option>
+          <option value="nl">Dutch</option>
+          <option value="fi">Finnish</option>
+          <option value="fr">French</option>
+          <option value="de">German</option>
+          <option value="hi">Hindi</option>
+          <option value="hu">Hungarian</option>
+          <option value="id">Indonesian</option>
+          <option value="ga">Irish</option>
+          <option value="it">Italian</option>
+          <option value="ja">Japanese</option>
+          <option value="ko">Korean</option>
+          <option value="pl">Polish</option>
+          <option value="pt">Portuguese</option>
+          <option value="ru">Russian</option>
+          <option value="es">Spanish</option>
+          <option value="sv">Swedish</option>
+          <option value="tr">Turkish</option>
+          <option value="uk">Ukranian</option>
+          <option value="vi">Vietnamese</option>
+        </select>
+        <p id="translated-text">
+          <!--Show translated text here-->
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  async function getData() {
+    let input = document.getElementById("input-text").value;
+    let inputLan = document.getElementById("lang-val").value;
+    let inputLanSour = document.getElementById("lang-val-source").value;
+    try {
+      let res = await fetch("https://libretranslate.de/translate", {
+        method: "POST",
+        body: JSON.stringify({
+          q: input,
+          source: inputLanSour,
+          target: inputLan,
+          format: "text",
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      let data = await res.json();
+      console.log(data.translatedText);
+      document.getElementById("translated-text").innerHTML =
+        data.translatedText;
+      // return data
+    } catch (err) {
+      console.log(err);
+    }
+  }
+</script>
